@@ -1,5 +1,15 @@
 #!/bin/bash
-# Sa'ad Farooq (2025)
+
+# Sa'ad Farooq (Fall 2025, s4farooq@uwaterloo.ca)
+# This script runs everything you need for assignment setup for Markus,
+# the only things that cannot be done in this script is:
+#    - Updating the MakeGradedAssignment.py file
+#    - Updating the rubric.csv converter
+#    - Running Moss must be done seperately
+#    - Setting graders on Markus
+# Usage:
+# ./all-scripts a0X_autotest 
+# Note: The X should be changed to the directory you need to go into it.
 
 set -e  
 
