@@ -6,7 +6,8 @@
 # python3 filter_functions.py output.txt allowed_fn1 allowed_fn2 ...
 # Note: For the allowed_fnx you will write any number of functions
 #     that the students were supposed to have (i.e. the main 
-#     function for each question).
+#     function for each question). This script must be inside the 
+#     same folder recursion-hk.py is in.
 
 import sys
 
