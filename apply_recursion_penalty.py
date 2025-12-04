@@ -1,5 +1,16 @@
 #!/usr/bin/env python3
 
+# Sa'ad Farooq (Fall 2025, s4farooq@uwaterloo.ca)
+# This script will automatically set grades to 0 for students who use recrusion
+#     this only applies to A08 unless there are other assignments where you need to give 
+#     students 0's for recursion.
+# Usage:
+# python3 apply_recursion_penalty.py output.txt <shorthand_name_of_assignment_on_markus>
+# Note: the output.txt is given from python ./recursion-hk.py */*.rkt > output.txt. Also
+#     if there is only one question you need to look for recurison on use this output.txt file:
+#     python ./recursion-hk.py */a0Xqx.rkt > output.txt. Where X is the assignment name and x is 
+#     the question you need to check.
+
 import sys
 import subprocess
 import re
