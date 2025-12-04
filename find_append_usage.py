@@ -1,5 +1,16 @@
 #!/usr/bin/env python3
 
+# Sa'ad Farooq (Fall 2025, s4farooq@uwaterloo.ca)
+# This script is to find the usage of a certain function in the case that
+#     some unallowed functions was accidentally skipped over. In this term
+#     we had forgotten to remove the function 'append' from the alloweable 
+#     functions list. This script will give you a list of students who used 
+#     a function that is not allowed, you will need to go in and reduce their
+#     based off of the instructors instructions. 
+# Usage:
+# python3 find_append_usage.py a0X_autotest 
+# Note: The X should be changed to the directory you need to go into it.
+
 import os
 import sys
 
@@ -10,7 +21,7 @@ def find_append_in_file(path):
     try:
         with open(path, "r", encoding="utf-8") as f:
             content = f.read()
-            return "append" in content
+            return "append" in content 
     except:
         return False
 
@@ -35,7 +46,7 @@ def main():
         used_in = []
 
         # Check q1, q2, q3
-        for q in ["a08q1.rkt", "a08q2.rkt", "a08q3.rkt"]:
+        for q in ["a08q1.rkt", "a08q2.rkt", "a08q3.rkt"]: #Change a0Xqx.rkt for the needed questions
             qpath = os.path.join(student_dir, q)
             if find_append_in_file(qpath):
                 used_in.append(q.replace(".rkt", ""))
