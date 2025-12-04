@@ -1,11 +1,12 @@
 # Sa'ad Farooq (Fall 2025, s4farooq@uwaterloo.ca)
 # This script is to help the ISA's filter through the list of students who 
-# use functions outside of local. You must run recurison-hk.py first and 
-# give this script that output.txt file. 
+#     use functions outside of local. You must run recurison-hk.py first and 
+#     give this script that output.txt file. 
 # Usage:
 # python3 filter_functions.py output.txt allowed_fn1 allowed_fn2 ...
 # Note: For the allowed_fnx you will write any number of functions
-# that the students were supposed to have (i.e. the main function for each question)
+#     that the students were supposed to have (i.e. the main 
+#     function for each question).
 
 import sys
 
