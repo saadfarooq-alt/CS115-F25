@@ -1,5 +1,13 @@
 #!/bin/bash
 
+# Sa'ad Farooq (Fall 2025, s4farooq@uwaterloo.ca)
+# This script is to delete all the ISA solution files from a0X_autotest
+#     after its downloaded from Markus.
+# Usage:
+# ./delete_ISA_solns a0X_autotest
+# Note: The X should be changed to the directory you need to delete
+#    the ISA solutions from.
+
 if [ -z "$1" ]; then
     echo "Usage: $0 <directory>"
     exit 1
