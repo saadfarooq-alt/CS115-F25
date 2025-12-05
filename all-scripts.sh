@@ -7,29 +7,20 @@
 # tasks into a single command to streamline the ISA workflow.
 #
 # The script performs all steps that *can* be safely automated, including:
-#   - Running distrst and check-testcases concurrently
+#   - Running distrst and check-testcases concurrently (if assignments >= a04 check-testcases are run aswell)
 #   - Generating the graded assignment file
 #   - Uploading grading results to MarkUs
 #   - Applying RST-based autograding results
-#   - Computing missing test counts and converting them into RST marks
+#   - Computing missing test counts and converting them into RST marks (if assignments >= a04)
 #
-# The following steps must still be performed manually, as they cannot be
-# reliably automated:
+# The following steps must still be performed manually:
 #   - Updating MakeGradedAssignment.py
 #   - Updating rubric.csv
-#   - Running Moss for plagiarism detection
+#   - Running Moss
 #   - Assigning markers on MarkUs
 #
 # Usage:
-#     ./all-scripts a0X_autotest
-#
-# Notes:
-#   - Replace "X" with the appropriate assignment number.
-#   - This script assumes the standard directory layout used by ISAs,
-#     including ~/scripts, ~/handin, and ~/marking.
-#   - Log files for distrst and check-testcases are saved to ~/logs/<assignment>.
-#   - For assignment 4 and onwards, you must open this script with a text editor 
-#     and update "--total-tests" in line 96 to match the instructors total checktests.
+#     ./all-scripts <assignment_id>
 
 set -e  
 
@@ -41,60 +32,80 @@ fi
 ASSIGNMENT="$1"
 AUTOTEST_DIR="${ASSIGNMENT}_autotest"
 
+# --- Extract numeric assignment number ---
+ASSIGN_NUM=$(echo "$ASSIGNMENT" | sed 's/[^0-9]*//g')
+
 LOG_DIR=~/logs/$ASSIGNMENT
 mkdir -p "$LOG_DIR"
 
 echo "_____________________________________________________________"
-echo "Running distrst and check-testcases concurrently for $ASSIGNMENT..."
-echo "Logs will be written to: $LOG_DIR"
+echo "Running distrst for $ASSIGNMENT..."
 echo "_____________________________________________________________"
 
-# --- Run distrst in background and log output ---
+# Always run distrst
 {
-  echo ">>> Starting distrst for $ASSIGNMENT..."
   distrst -t t -s '*' "$AUTOTEST_DIR" 1 AUTOTESTRESULTS
-  echo ">>> distrst finished successfully."
 } &> "$LOG_DIR/distrst.log" &
 DIST_PID=$!
 
-# --- Run tcs in background and log output ---
-{
-  echo ">>> Starting check-testcases (tcs) for $ASSIGNMENT..."
-  cd "../check-testcases/$ASSIGNMENT" || exit 1
-  ./tcs
-  echo ">>> tcs finished successfully."
-} &> "$LOG_DIR/tcs.log" &
-TCS_PID=$!
+# ------------------------------------------------------------
+# Run tcs ONLY if assignment number >= 4
+# ------------------------------------------------------------
+if [ "$ASSIGN_NUM" -ge 4 ]; then
+    echo "Assignment $ASSIGNMENT is >= a04 — running check-testcases..."
+    {
+      cd "../check-testcases/$ASSIGNMENT" || exit 1
+      ./tcs
+    } &> "$LOG_DIR/tcs.log" &
+    TCS_PID=$!
+else
+    echo "Assignment $ASSIGNMENT is < a04 — skipping check-testcases."
+    TCS_PID=""
+fi
 
-# --- Wait for both to finish ---
+# Wait for distrst
 wait $DIST_PID
-wait $TCS_PID
+
+# Wait for tcs only if it was run
+if [ -n "$TCS_PID" ]; then
+    wait $TCS_PID
+fi
 
 echo "_____________________________________________________________"
-echo "Both distrst and tcs completed. Logs available in:"
-echo "  $LOG_DIR/distrst.log"
-echo "  $LOG_DIR/tcs.log"
+echo "Finished core testing steps."
 echo "_____________________________________________________________"
 
 # --- Making the GRADDEDASSIGNMENT.rkt 
 cd ~/scripts
-echo "Running MakeGradedAssignment.py..."
 python3 MakeGradedAssignment.py
 
 cd ~
-echo "Uploading grading to MarkUs..."
 /u/isg/bin/markus.py upload_marking -o --match "GRADED_ASSIGNMENT.ss" "$ASSIGNMENT" "$HOME/handin/${AUTOTEST_DIR}/"
 
-cd ~
-echo "Setting marks in MarkUs using RST results..."
-/u/isg/bin/markus.py set_marks_rst "$ASSIGNMENT" "$HOME/marking/$ASSIGNMENT/test.1.AUTOTESTRESULTS" "$HOME/marking/$ASSIGNMENT/rubric_converter.csv" 
+/u/isg/bin/markus.py set_marks_rst "$ASSIGNMENT" "$HOME/marking/$ASSIGNMENT/test.1.AUTOTESTRESULTS" "$HOME/marking/$ASSIGNMENT/rubric_converter.csv"
 
-cd scripts
-python3 count_missing_tests.py "$HOME/handin/$AUTOTEST_DIR" > "$HOME/marking/$ASSIGNMENT/missing_tests.txt"
+# ------------------------------------------------------------
+# Missing test checks ONLY for assignments >= a04
+# ------------------------------------------------------------
+if [ "$ASSIGN_NUM" -ge 4 ]; then
+    echo "Assignment >= a04 — computing missing test penalties..."
 
-echo "Setting check test cases mark using RST results..."
-python3 convert_missing_to_rst.py --missing "$HOME/marking/$ASSIGNMENT/missing_tests.txt" --out-results-dir "$HOME/marking/$ASSIGNMENT/missing_autotest/" --total-tests 19
-/u/isg/bin/markus.py set_marks_rst "$ASSIGNMENT" "$HOME/marking/$ASSIGNMENT/missing_autotest" "$HOME/marking/$ASSIGNMENT/correctness_thresholds.csv"
+    cd scripts
+    python3 count_missing_tests.py "$HOME/handin/$AUTOTEST_DIR" > "$HOME/marking/$ASSIGNMENT/missing_tests.txt"
+
+    python3 convert_missing_to_rst.py \
+        --missing "$HOME/marking/$ASSIGNMENT/missing_tests.txt" \
+        --out-results-dir "$HOME/marking/$ASSIGNMENT/missing_autotest/" \
+        --total-tests 19
+
+    /u/isg/bin/markus.py set_marks_rst \
+        "$ASSIGNMENT" \
+        "$HOME/marking/$ASSIGNMENT/missing_autotest" \
+        "$HOME/marking/$ASSIGNMENT/correctness_thresholds.csv"
+
+else
+    echo "Assignment < a04 — skipping missing test penalties."
+fi
 
 echo "_____________________________________________________________"
 echo "All steps completed for assignment $ASSIGNMENT."
