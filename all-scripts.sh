@@ -1,15 +1,35 @@
 #!/bin/bash
 
 # Sa'ad Farooq (Fall 2025, s4farooq@uwaterloo.ca)
-# This script runs everything you need for assignment setup for Markus,
-# the only things that cannot be done in this script is:
-#    - Updating the MakeGradedAssignment.py file
-#    - Updating the rubric.csv converter
-#    - Running Moss must be done seperately
-#    - Setting graders on Markus
+#
+# This script automates the full setup and processing workflow for
+# assignment grading on MarkUs. It consolidates several commonly used
+# tasks into a single command to streamline the ISA workflow.
+#
+# The script performs all steps that *can* be safely automated, including:
+#   - Running distrst and check-testcases concurrently
+#   - Generating the graded assignment file
+#   - Uploading grading results to MarkUs
+#   - Applying RST-based autograding results
+#   - Computing missing test counts and converting them into RST marks
+#
+# The following steps must still be performed manually, as they cannot be
+# reliably automated:
+#   - Updating MakeGradedAssignment.py
+#   - Updating rubric.csv
+#   - Running Moss for plagiarism detection
+#   - Assigning markers on MarkUs
+#
 # Usage:
-# ./all-scripts a0X_autotest 
-# Note: The X should be changed to the directory you need to go into it.
+#     ./all-scripts a0X_autotest
+#
+# Notes:
+#   - Replace "X" with the appropriate assignment number.
+#   - This script assumes the standard directory layout used by ISAs,
+#     including ~/scripts, ~/handin, and ~/marking.
+#   - Log files for distrst and check-testcases are saved to ~/logs/<assignment>.
+#   - For assignment 4 and onwards, you must open this script with a text editor 
+#     and update "--total-tests" in line 96 to match the instructors total checktests.
 
 set -e  
 
