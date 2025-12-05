@@ -12,12 +12,18 @@
 #
 # For each student, this script:
 #     - calculates passed_tests = total_tests - missing_tests
-#     - creates a directory inside the output results folder
+#     - creates a directory called missing_autotests where each 
+#       student has a folder with an OUTPUT.txt file.
 #     - writes an OUTPUT.txt file with the appropriate RST question line:
-#           ** Question <qname>: <passed_tests>/<total_tests>
+#
+#           Some header info
+#
+#            ** Question missing: 11/19
+#
+#           Some footer text
 #
 # Usage:
-#     python3 generate_missing_test_results.py --missing missing_tests.txt --out-results-dir results --total-tests 20
+#     python3 generate_missing_test_results.py --missing missing_tests.txt --out-results-dir missing_autotests --total-tests 20
 #
 # Notes:
 #     - The --missing file is produced by your test runner or evaluation
