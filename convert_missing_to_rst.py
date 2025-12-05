@@ -21,7 +21,6 @@
 #         --missing missing_tests.txt \
 #         --out-results-dir results/ \
 #         --total-tests 20 \
-#         --qname a08tests
 #
 # Notes:
 #     - The --missing file is produced by your test runner or evaluation
