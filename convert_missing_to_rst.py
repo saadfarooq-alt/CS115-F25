@@ -1,4 +1,37 @@
 #!/usr/bin/env python3
+
+# Sa'ad Farooq (Fall 2025, s4farooq@uwaterloo.ca)
+# This script reads a missing_tests.txt file and automatically generates
+#     per-student OUTPUT.txt files (RST-style) indicating how many tests
+#     each student passed. This is mainly used for assignments where a
+#     separate testing pipeline outputs the *number of missing tests*
+#     rather than the number of passed tests.
+#
+# The missing_tests.txt file must contain lines formatted as:
+#     <student_id>: Total missing tests: <number>
+#
+# For each student, this script:
+#     - calculates passed_tests = total_tests - missing_tests
+#     - creates a directory inside the output results folder
+#     - writes an OUTPUT.txt file with the appropriate RST question line:
+#           ** Question <qname>: <passed_tests>/<total_tests>
+#
+# Usage:
+#     python3 generate_missing_test_results.py \
+#         --missing missing_tests.txt \
+#         --out-results-dir results/ \
+#         --total-tests 20 \
+#         --qname a08tests
+#
+# Notes:
+#     - The --missing file is produced by your test runner or evaluation
+#       pipeline that counts how many tests a student did *not* pass.
+#     - If the assignment has multiple questions with different test sets,
+#       you can run this script separately for each test group, using
+#       different --qname values so the RST output labels match.
+#     - The script ignores malformed lines in missing_tests.txt.
+#     - Student folders are created automatically if they do not exist.
+
 import os
 import argparse
 
