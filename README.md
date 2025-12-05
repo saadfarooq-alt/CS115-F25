@@ -1,14 +1,14 @@
-Hello! 
+Hello,
 
-These are all the scripts I have worked on throughout this term to make all the graders and our lives easier. There are 2 breakthrough projects I have made for this term so far:
-  
-  1. Automatically setting examples & tests grades for marking.
-  2. Putting all the required scripts that are always used into one script that does everything needed for the assignments.
+Throughout this term, I have developed a collection of scripts designed to streamline the grading workflow and make the process more efficient for both graders and ISA staff. Among these, there are two major contributions:
 
-I have made some other scripts that have also directly helped the ISA's in their marking:
+  1. Automated Examples and Tests Grading – A system that automatically assigns grades for examples and test cases, significantly reducing manual effort.
+  2. Unified Assignment Processing Script – A consolidated tool that integrates all commonly used grading utilities into a single script, allowing graders to run every required operation for an assignment with one command.
+     
+In addition to these larger projects, I have also created several targeted utilities that have provided direct support to ISAs during marking:
 
-  1. Automatic recursion grade deduction.
-  2. List of students who have used a certain function which is dissalowed but not caught by our scripts. 
-  3. Filter through a very large list of students who have used functions outside of a local scope when it is required to not use (a07 and above)
-
-I will be adding to this list as the term goes forward!
+  1. Automatic Recursion Penalty Application – Automatically assigns a grade of zero when recursion is detected in assignments where it is not permitted.
+  2. Detection of Disallowed Function Usage – Generates a list of students who used specific prohibited functions that may not be caught by existing scripts.
+  3. Filtering for Improper Use of Non-Local Functions – Efficiently filters large student datasets to identify cases where functions were improperly used outside a local scope (relevant for A07 and onward).
+     
+I will continue to expand this set of tools as the term progresses
