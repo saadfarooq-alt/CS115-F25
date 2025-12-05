@@ -17,18 +17,13 @@
 #           ** Question <qname>: <passed_tests>/<total_tests>
 #
 # Usage:
-#     python3 generate_missing_test_results.py \
-#         --missing missing_tests.txt \
-#         --out-results-dir results/ \
-#         --total-tests 20 \
+#     python3 generate_missing_test_results.py --missing missing_tests.txt --out-results-dir results --total-tests 20
 #
 # Notes:
 #     - The --missing file is produced by your test runner or evaluation
 #       pipeline that counts how many tests a student did *not* pass.
-#     - If the assignment has multiple questions with different test sets,
-#       you can run this script separately for each test group, using
-#       different --qname values so the RST output labels match.
-#     - The script ignores malformed lines in missing_tests.txt.
+#     - The --total-tests must be changed for the total number of tests intsturctors want 
+#       for the assignment. 
 #     - Student folders are created automatically if they do not exist.
 
 import os
