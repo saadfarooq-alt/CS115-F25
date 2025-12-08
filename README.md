@@ -10,5 +10,6 @@ In addition to these larger projects, I have also created several targeted utili
   1. Automatic Recursion Penalty Application: Automatically assigns a grade of zero when recursion is detected in assignments where it is not permitted.
   2. Detection of Disallowed Function Usage: Generates a list of students who used specific prohibited functions that may not be caught by existing scripts.
   3. Filtering for Improper Use of Non-Local Functions: Efficiently filters large student .txt files to identify cases where functions were improperly used outside a local scope (relevant for A07 and onward).
+  4. Removal of -student solutions: Deletes all -student solutions which are either the ISA solutions or the instructor solutions that are not to be marked by the TA's/graders saving them submissions. 
      
 I will continue to expand this set of tools as the term progresses
