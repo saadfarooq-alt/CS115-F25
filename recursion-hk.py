@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # Copyright 2020 Cameron Morland
-# Modified 2025 by Sa'ad’s ChatGPT Assistant to detect nested recursion.
+# Modified 2025 by Sa'ad to detect nested recursion and recursion within the local scope.
 
 import sys
 
@@ -13,10 +13,6 @@ help = '''recursion-hk.py [-l] [filenames]
     - lambda-based recursive helpers
     or with [-l], list all global functions in the file.
 '''
-
-############################################################
-# TOKENIZER (unchanged)
-############################################################
 
 def tokenize(filename, keepcomments=False):
     def keep_item(x):
@@ -56,7 +52,7 @@ def tokenize(filename, keepcomments=False):
         return tokenize_raw(L)
 
 ############################################################
-# NEW: extract all nested function definitions
+# Sa'ad: extract all nested function definitions
 ############################################################
 
 def gather_all_defines(expr, collected):
@@ -72,11 +68,7 @@ def gather_all_defines(expr, collected):
     for item in expr:
         if isinstance(item, list):
             gather_all_defines(item, collected)
-
-############################################################
-# Seek for a function name inside an expression (unchanged)
-############################################################
-
+            
 def seek(target, expr):
     for item in expr:
         if item == target:
@@ -86,7 +78,7 @@ def seek(target, expr):
     return False
 
 ############################################################
-# UPDATED: detect recursion including nested helpers
+# Sa'ad UPDATED: detect recursion including nested helpers
 ############################################################
 
 def seek_recursion(filename):
@@ -115,10 +107,6 @@ def seek_recursion(filename):
                 found = True
                 print(f"    {funcname}")
 
-############################################################
-# List global functions only (unchanged)
-############################################################
-
 def list_functions(filename):
     funclist = []
     for L in tokenize(filename):
@@ -128,10 +116,6 @@ def list_functions(filename):
     funclist.sort()
     print(filename + ":\t", " ".join(funclist))
     return 0
-
-############################################################
-# MAIN
-############################################################
 
 if len(sys.argv) == 1 or '-h' in sys.argv or '--help' in sys.argv:
     print(help)
