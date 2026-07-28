@@ -13,4 +13,3 @@ In addition to these larger projects, I have also created several targeted utili
   4. Removal of -student Solutions: Deletes all -student solutions which are either the ISA solutions or the instructor solutions that are not to be marked by the TA's/graders saving them submissions.
   5. Detected Recursion in Student Submissions: Updated the already made recursion-hk.py script to detect nested defines + functions within local scope that use recursion. 
      
-I will continue to expand this set of tools as the term progresses
